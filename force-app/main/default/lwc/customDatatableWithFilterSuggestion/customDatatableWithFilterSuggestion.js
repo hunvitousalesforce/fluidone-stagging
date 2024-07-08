@@ -5,9 +5,13 @@ import lwcDatatableStyle from '@salesforce/resourceUrl/lwcDatatableStyle';
 import getProduct2List from "@salesforce/apex/CustomDatatableWithFilterController.getProduct2List";
 import { columns } from "./columns";
 import getChildProduct from "@salesforce/apex/CustomDatatableWithFilterController.getChildProduct";
+import getProductSelections from "@salesforce/apex/CustomDatatableWithFilterController.getProductSelections";
+
+
 export default class CustomDatatableWithFilterSuggestion extends LightningElement {
     columns = columns;
     @api quoteId;
+    @api selectedProducts;
     @api contractReference;
     @api contractEndDate;
     @api postCode;
@@ -25,9 +29,7 @@ export default class CustomDatatableWithFilterSuggestion extends LightningElemen
         return Object.values(this.productRender);
     }
 
-    get searchResults() {
-        return Object.values(this.searchRender)
-    }
+  
 
     @api
     get returnedQuoteLines() {
@@ -81,11 +83,12 @@ export default class CustomDatatableWithFilterSuggestion extends LightningElemen
         ]).then(() => {
 
         });
-        const result = await this.loadRelatedRecords(this.searchTerm);
-        // store result as key, value
-        result.forEach((r) => {
-            this.productRender[r.Id] = r;
-        });
+        const result = await this.loadRelatedRecords();
+
+        result.forEach(item => {
+          this.productRender[item.Id] = item;
+        })
+
         this.productRender = {
             ...this.productRender
         };
@@ -198,108 +201,7 @@ export default class CustomDatatableWithFilterSuggestion extends LightningElemen
         }
     }
 
-    async toggleInputSearchDatatable(event) {
-        const parentId = event.target.dataset.id;
-        const productId = event.target.name;
-        let selectedProduct = {};
-        // parentId = undefined meaning the selectedProduct doesn't have children product
-        if (!parentId) {
-            selectedProduct = this.searchRender[productId];
-        } else {
-            const parentProduct = this.searchRender[parentId];
-            selectedProduct = parentProduct._children.find(
-                (item) => item.Id === productId && item.ParentId === parentId
-            );
-        }
-        // Toggle the selection state
-        selectedProduct.Selected = !selectedProduct.Selected;
-        // If the product is a parent, toggle all its children
-        if (
-            selectedProduct.Parent_Product__c &&
-            !selectedProduct._children.length
-        ) {
-            // get children and append to seletect
-            await this.appendChildRecordsToParent(selectedProduct);
-            selectedProduct._children = selectedProduct._children.map((child) => ({
-                ...child,
-                Selected: selectedProduct.Selected
-            }));
-        }
-        // Update selected records
-        if (selectedProduct.Selected) {
-            if (selectedProduct.Parent_Product__c) {
-                const temp = {
-                    ...selectedProduct,
-                    _children: []
-                };
-                this.selectedRecords[selectedProduct.Id] = {
-                    ...temp
-                };
-                selectedProduct._children.forEach((child) => {
-                    this.selectedRecords[child.Id] = {
-                        ...child
-                    };
-                });
-            } else {
-                this.selectedRecords[selectedProduct.Id] = {
-                    ...selectedProduct
-                };
-            }
-        } else {
-            if (selectedProduct.Parent_Product__c) {
-                delete this.selectedRecords[selectedProduct.Id];
-                // reset value
-                selectedProduct.SBQQ__Quantity__c = null;
-                selectedProduct.Unit_Sell__c = null;
-                selectedProduct.SBQQ__UnitCost__c = null;
-                selectedProduct.SBQQ__RequiredBy__c = "";
 
-                selectedProduct._children.forEach((child) => {
-                    delete this.selectedRecords[child.Id];
-                    // reset child
-                    child.SBQQ__Quantity__c = null;
-                    child.Unit_Sell__c = null;
-                    child.SBQQ__UnitCost__c = null;
-                    child.SBQQ__RequiredBy__c = "";
-                });
-            } else {
-                delete this.selectedRecords[selectedProduct.Id];
-                // reset value
-                selectedProduct.SBQQ__Quantity__c = null;
-                selectedProduct.Unit_Sell__c = null;
-                selectedProduct.SBQQ__UnitCost__c = null;
-                selectedProduct.SBQQ__RequiredBy__c = "";
-            }
-        }
-
-        // Update the productRender object immutably to ensure reactivity
-        if (selectedProduct.Parent_Product__c) {
-            this.searchRender = {
-                ...this.searchRender,
-                [productId]: {
-                    ...selectedProduct
-                }
-            };
-        } else {
-            const parentProduct = this.searchRender[parentId];
-            const updatedChildren = parentProduct._children.map((child) => {
-                if (child.Id === productId && child.ParentId === parentId) {
-                    return {
-                        ...selectedProduct
-                    };
-                }
-                return child;
-            });
-
-            this.searchRender = {
-                ...this.searchRender,
-                [parentId]: {
-                    ...parentProduct,
-                    _children: updatedChildren
-                }
-            };
-        }
-    }
 
     handleInputChange(event) {
         const parentId = event.target.dataset.parentid;
@@ -318,9 +220,6 @@ export default class CustomDatatableWithFilterSuggestion extends LightningElemen
             selectedProduct =
                 this.productRender[productId] || this.selectedRecords[productId];
         } else {
-            // let parentProduct = this.productListToRender.find(
-            //   (item) => item.Id === parentId
-            // );
             let parentProduct = this.productRender[parentId];
 
             if (parentProduct && parentProduct._children) {
@@ -371,73 +270,6 @@ export default class CustomDatatableWithFilterSuggestion extends LightningElemen
         }
     }
 
-    handleInputChangeSearchDatatable(event) {
-        const parentId = event.target.dataset.parentid;
-        const name = event.target.name;
-        let value = event.target.value;
-        let productId = event.target.dataset.id;
-
-        let selectedProduct = null;
-
-        if (name === "SBQQ__RequiredBy__c") {
-            productId = event.detail.customProductId;
-            value = event.detail.id;
-        }
-
-        if (!parentId) {
-            selectedProduct =
-                this.searchRender[productId] || this.selectedRecords[productId];
-            // parentProduct = this.searchResults.find((item) => item.Id === parentId);
-        } else {
-            let parentProduct = this.searchRender[parentId];
-            if (parentProduct && parentProduct._children) {
-                selectedProduct = parentProduct._children.find(
-                    (item) => item.Id === productId && item.ParentId === parentId
-                );
-            }
-        }
-
-        if (selectedProduct) {
-            // Update the value for the selected product
-            selectedProduct[name] = value;
-            // Update in selected records
-            this.selectedRecords[productId] = {
-                ...selectedProduct
-            };
-        }
-        // Update the productListToRender to trigger reactivity
-        // Handle reactivity for productRender
-        if (!parentId) {
-            // if
-
-            if (productId in this.searchRender) {
-                this.searchRender = {
-                    ...this.searchRender,
-                    [productId]: {
-                        ...selectedProduct
-                    }
-                };
-            }
-        } else {
-            // If the product is a child, update the parent's _children array
-            const parentProduct = this.searchRender[parentId];
-            const updatedChildren = parentProduct._children.map((child) =>
-                child.Id === productId && child.ParentId === parentId ?
-                {
-                    ...selectedProduct
-                } :
-                child
-            );
-
-            this.searchRender = {
-                ...this.searchRender,
-                [parentId]: {
-                    ...parentProduct,
-                    _children: updatedChildren
-                }
-            };
-        }
-    }
 
     showToast(title, message, variant) {
         this.dispatchEvent(
@@ -449,31 +281,14 @@ export default class CustomDatatableWithFilterSuggestion extends LightningElemen
         );
     }
 
-    async handleSearchChange(event) {
-        this.searchTerm = event.target.value;
-        this.showSpinner = true;
-        // get the search result and update in search product datatable
-        const searchProducts = await this.loadRelatedRecords(this.searchTerm);
-
-        searchProducts.forEach((r) => {
-            this.searchRender[r.Id] = r;
-        });
-
-        this.searchRender = {
-            ...this.searchRender
-        };
-
-        this.showSpinner = false;
-    }
-
-    async loadRelatedRecords(keyword) {
+    async loadRelatedRecords() {
         let result;
         let newProductList = [];
         try {
-            result = await getProduct2List({
-                keyword: keyword
+            result = await getProductSelections({
+                Ids: this.selectedProducts
             });
-            newProductList = result.map((item) => {
+            newProductList = Object.values(result).map((item) => {
                 const newItem = {
                     Id: item.Id,
                     Name: item.Name,

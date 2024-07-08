@@ -1,0 +1,36 @@
+.level-1 td:nth-of-type(2) {
+    padding-left: 1.5rem;
+  }
+  
+  .col-normal {
+    padding-left: 8px;
+    min-width: 60px;
+  }
+  
+  .custom-container {
+    max-height: 394px;
+  }
+  
+  .table-body-container {
+    width: 100%;
+    overflow: auto;
+  }
+  
+  .col-productname {
+    width: 190px;
+  }
+  
+  .col-productname .slds-truncate {
+    white-space: pre-wrap;
+  }
+  
+  .input-width{
+    width: 100px;
+  }
+  
+  table.slds-table_cell-buffer thead {
+    position: sticky;
+    top: -16px;
+    box-shadow: inset 0px 0px 1px 0 #333;
+    z-index: 15;
+  }

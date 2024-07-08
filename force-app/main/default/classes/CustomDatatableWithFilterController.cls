@@ -2,6 +2,24 @@ public with sharing class CustomDatatableWithFilterController {
 	private static String queryWhere = 'SELECT Id, Name, Description, Parent_Product__c, SBQQ__DefaultQuantity__c, SBQQ__SubscriptionPricing__c, (Select Id, SBQQ__UnitCost__c From SBQQ__Costs__r Where SBQQ__Active__c = true Limit 1) FROM Product2 Where';
 	public CustomDatatableWithFilterController() {}
 
+    @AuraEnabled
+    public static Map<Id, Product2> getProductSelections(List<Id> Ids){
+
+      String query = '';
+      Map<Id, Product2> result = new Map<Id, Product2>();
+      try {
+        List<Product2> products = Database.query(queryWhere + ' Id IN :Ids And IsActive = true');
+
+        for (Product2 product : products ) {
+          result.put(product.Id, product);
+        }
+      } catch (Exception e) {
+        throw new AuraHandledException(e.getMessage());
+      }
+      System.debug(result);
+      return result;
+    }
+
     @AuraEnabled(cacheable = true)
     public static List<Product2> getProduct2List(String keyword) {
 		

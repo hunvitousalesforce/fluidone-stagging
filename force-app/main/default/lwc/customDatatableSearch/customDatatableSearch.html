@@ -1,0 +1,13 @@
+<template>
+    <div class="custom-container slds-table_edit_container">
+		<div class="searchbar-container slds-grid slds-grid_vertical-align-end slds-m-bottom_x-small">
+			<lightning-input class="slds-col slds-size_1-of-1" type="search" value={searchTerm} label="Search Product" onchange={handleSearchChange} name="search"></lightning-input>
+		</div>
+        <lightning-datatable
+            key-field="id"
+            data={data}
+            onrowselection={getSelectedRecord}
+            columns={columns}>
+        </lightning-datatable>
+	</div>
+</template>
