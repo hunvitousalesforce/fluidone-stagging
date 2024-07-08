@@ -1,0 +1,34 @@
+.slds-table_bordered {
+    border-left: var(--lwc-borderWidthThin,1px) solid var(--slds-g-color-border-base-1, var(--lwc-colorBorder,rgb(201, 201, 201)));
+    border-right: var(--lwc-borderWidthThin,1px) solid var(--slds-g-color-border-base-1, var(--lwc-colorBorder,rgb(201, 201, 201)));
+}
+
+table.slds-table_cell-buffer {
+    border-collapse: collapse;
+    width: 95%;
+}
+
+table.slds-table_cell-buffer thead {
+    position: sticky;
+    top: -16px;
+    box-shadow: inset 0px 0px 1px 0 #333;
+    z-index: 15;
+}
+
+table.slds-table_cell-buffer thead th {
+    background-color: #f3f3f3;
+    height: 46px;
+}
+
+table.slds-table_cell-buffer tfoot {
+    position: sticky;
+    bottom: 0px;
+    box-shadow: inset 0px 0px 1px 0 #333;
+    z-index: 15;
+    background-color: #f3f3f3;
+}
+
+abbr.slds-required {
+    position: absolute;
+    margin-left: -10px;
+}

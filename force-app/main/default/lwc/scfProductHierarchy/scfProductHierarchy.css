@@ -1,0 +1,34 @@
+.sticky-box {
+    position: sticky;
+    top: -16px;
+    box-shadow: inset 0px 0px 1px 0 #333;
+    z-index: 15;
+    background-color: #f3f3f3;
+}
+
+.slds-table_bordered {
+    border-left: var(--lwc-borderWidthThin,1px) solid var(--slds-g-color-border-base-1, var(--lwc-colorBorder,rgb(201, 201, 201)));
+    border-right: var(--lwc-borderWidthThin,1px) solid var(--slds-g-color-border-base-1, var(--lwc-colorBorder,rgb(201, 201, 201)));
+    border-bottom: 0;
+    border-collapse: collapse;
+}
+
+.slds-table_bordered thead {
+    position: sticky;
+    top: -16px;
+    box-shadow: inset 0px 0px 1px 0 #333;
+    z-index: 15;
+}
+
+.slds-table_bordered thead th {
+    background-color: #f3f3f3;
+    height: 46px;
+}
+
+.slds-table_bordered tfoot {
+    position: sticky;
+    bottom: 0px;
+    box-shadow: inset 0px 0px 1px 0 #333;
+    z-index: 15;
+    background-color: #f3f3f3;
+}

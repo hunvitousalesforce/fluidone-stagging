@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>59.0</apiVersion>
+    <isExposed>true</isExposed>
+    <targets>
+        <target>lightning__FlowScreen</target>
+    </targets>
+    <targetConfigs>
+        <targetConfig targets="lightning__FlowScreen">
+            <property
+        name="quoteId"
+        label="Quote ID"
+        type="String"
+        required="true"
+      />
+            <property
+        name="contractReference"
+        label="Contract Reference"
+        type="String"
+      />
+            <property
+        name="contractEndDate"
+        label="Contract End Date"
+        type="Date"
+      />
+            <property name="postCode" label="Post Code" type="String" />
+            <property name="recurring" label="Recurring" type="Boolean" />
+            <property
+        name="opportunityRecordTypeName"
+        label="Opportunity Record Type Name"
+        type="String"
+      />
+            <property
+        name="returnedQuoteLines"
+        label="Selected Quote Lines"
+        role="outputOnly"
+        type="@salesforce/schema/SBQQ__QuoteLine__c[]"
+      />
+
+        </targetConfig>
+    </targetConfigs>
+</LightningComponentBundle>

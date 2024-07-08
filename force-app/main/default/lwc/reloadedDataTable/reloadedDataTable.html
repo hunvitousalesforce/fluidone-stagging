@@ -1,0 +1,41 @@
+<template>
+  <div style="height: 300px">
+    <lightning-record-edit-form>
+      <span class="slds-form-element__label slds-text-title_bold"
+        >Select Product</span
+      >
+      <lightning-input
+        name="enter-search"
+        label="Search when user hits the 'enter' key"
+        type="search"
+        onchange={handleChange}
+      ></lightning-input>
+      <div style="max-height: 530px" onitemregister={handleRegisterItem}>
+        <c-custom-data-table
+          onrowselection={rowSelectionHandler}
+          onitemregister={handleRegisterItem}
+          class="slds-table_cell-buffer slds-table_bordered"
+          onvaluechange={handleValueChange}
+          oncellchange={handleCellChange}
+          data={productListToRender}
+          columns={columns}
+          show-row-number-column="true"
+          key-field="Id"
+          draft-values={draftValues}
+          onsave={handleSave}
+          data-record="Id"
+          onedit={handleEdit}
+          oncancel={handleCancel}
+          sorted-by="Name"
+        >
+        </c-custom-data-table>
+      </div>
+    </lightning-record-edit-form>
+  </div>
+  <div class="showSpinner" if:true={showSpinner}>
+    <lightning-spinner
+      alternative-text="Loading"
+      variant="brand"
+    ></lightning-spinner>
+  </div>
+</template>

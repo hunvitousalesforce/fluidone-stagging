@@ -1,0 +1,12 @@
+.THIS.active-campaign {
+    color : #008000;
+}
+.THIS .Active, .THIS.Active:hover {
+    color : #008000;
+    background-color: #008000 !important;
+}
+
+.THIS .Inactive, .THIS.Inactive:hover {
+    color : red;
+    background-color: red !important;
+}

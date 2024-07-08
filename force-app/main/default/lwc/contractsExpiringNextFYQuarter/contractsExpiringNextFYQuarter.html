@@ -1,0 +1,17 @@
+<template>
+    <lightning-card title="Contracts due to expire in FY quarter">
+        <lightning-accordion allow-multiple-sections-open>
+            <template for:each={groupedContracts} for:item="group">
+                <lightning-accordion-section key={group.key} name={group.key} label={group.key}>
+                    <lightning-datatable
+                            key-field="Id"
+                            data={group.contracts}
+                            columns={columns}
+                            hide-checkbox-column="true"
+                    >
+                    </lightning-datatable>
+                </lightning-accordion-section>
+            </template>
+        </lightning-accordion>
+    </lightning-card>
+</template>

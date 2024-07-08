@@ -1,0 +1,15 @@
+.uiModal--recordActionWrapper.open.active
+.modal-container.slds-modal__container {
+  width: 85% !important;
+  max-width: 100% !important;
+}
+
+.required-by c-scf-input-lookup .slds-form-element .slds-dropdown_fluid {
+  max-width: 500px !important;
+  width: 500px !important;
+}
+
+.required-by c-scf-input-lookup .slds-form-element .slds-dropdown {
+  left: 100% !important;
+  transform: translateX(-100%) !important;
+}

@@ -1,0 +1,14 @@
+:host {
+    display: block;
+    margin: 10px;
+}
+
+.highlight {
+    background-color: yellow !important;
+}
+
+/* Add this CSS in your component's CSS file */
+
+.slds-text-color_success.slds-text-title_caps {
+    padding-left: 20px; /* Indent child rows */
+}

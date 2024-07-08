@@ -1,0 +1,9 @@
+<aura:component implements= "force:appHostable,flexipage:availableForRecordHome,lightning:availableForFlowScreens,force:hasRecordId" access="global">
+
+   <aura:attribute name="recordId" type="String"/>
+    
+   <!-- Handler Start -->
+	<aura:handler name="init" value="{!this}" action="{!c.init}"/>
+	<!-- Handler End -->
+    
+</aura:component>

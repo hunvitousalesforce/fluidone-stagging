@@ -1,0 +1,56 @@
+<template>
+	<div class="slds-m-top_large table-wrapper">
+		<lightning-record-edit-form object-api-name="SBQQ__QuoteLine__c">
+			<div>
+				<lightning-input
+					name="searchTerm"
+					label="Search product"
+					type="search"
+					value={searchTerm}
+					onchange={handleSearchChange}
+				></lightning-input>
+			</div>
+			<table class="slds-table slds-table_cell-buffer slds-table_bordered">
+				<thead>
+					<tr class="slds-line-height_reset">
+						<th scope="col">
+							<div class="slds-truncate" title="Product Name">Product Name</div>
+						</th>
+						<th scope="col">
+							<div class="slds-truncate" title="Quantity" data-name="Quantity">Quantity</div>
+						</th>
+						<th scope="col">
+							<div class="slds-truncate" title="Unit Price">Unit Price</div>
+						</th>
+						<th scope="col">
+							<div class="slds-truncate" title="Unit Sell">Unit Sell</div>
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+					<template iterator:it={records}>
+						<tr key={it.value.item.Id}>
+							<td class="col1" data-label="Product Name">
+								<div class="slds-truncate product-name" title={it.value.item.Name}>{it.value.item.Name}</div>
+							</td>
+							<td class="col2" data-label="Quantity">
+								<lightning-input type="number" required variant="label-hidden" name="SBQQ__Quantity__c" value={it.value.item.SBQQ__Quantity__c} data-index={it.index} onchange={handleLineChange}></lightning-input>
+							</td>
+							<td class="col3" data-label="Unit Price">
+                                <lightning-input type="number" required variant="label-hidden" name="UnitPrice__c" value={it.value.item.UnitPrice__c} step="0.01" data-index={it.index} onchange={handleLineChange}></lightning-input>
+							</td>
+                            <td class="col4" data-label="Unit Sell">
+                                <lightning-input type="number" required variant="label-hidden" name="Unit_Sell__c" value={it.value.item.Unit_Sell__c} step="0.01" data-index={it.index} onchange={handleLineChange}></lightning-input>
+							</td>
+						</tr>
+					</template>
+				</tbody>
+				<tfoot>
+					<tr class="line-total">
+						
+					</tr>
+				</tfoot>
+			</table>
+		</lightning-record-edit-form>
+	</div>
+</template>

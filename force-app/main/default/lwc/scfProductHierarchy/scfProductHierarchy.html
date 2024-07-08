@@ -1,0 +1,29 @@
+<template>
+	<div class="sticky-box slds-p-around_small">
+		<lightning-input 
+			class="slds-p-bottom_small" 
+			onchange={handleChange} 
+			type="search" 
+			autocomplete="off" 
+			label={label} 
+			field-level-help={helpText} 
+			placeholder={placeholder}>
+		</lightning-input>
+		<div class="slds-p-bottom_small slds-text-body_small">
+			{selectedRowsCount}Selected: <span class="slds-text-color_weak">{selectedRowNames}</span>
+		</div>
+	</div>
+	<div class="slds-table_bordered">
+		<lightning-tree-grid
+			is-loading={loading}
+			show-row-number-column="true"
+			columns={gridColumns}
+			data={records}
+			key-field="id"
+			expanded-rows={gridExpandedRows}
+			selected-rows={selectedRows}
+			onrowselection={handleRowSelection}
+			ontoggle={handleRowToggle}>
+		</lightning-tree-grid>
+	</div>
+</template>

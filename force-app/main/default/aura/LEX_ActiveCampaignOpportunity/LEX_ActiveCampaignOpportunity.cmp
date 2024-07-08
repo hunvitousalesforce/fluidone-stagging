@@ -1,0 +1,106 @@
+<aura:component implements="force:lightningQuickActionWithoutHeader,force:hasRecordId" access="global" controller="LEX_ActiveCampaignOpportunityController">
+
+    <aura:attribute name="recordId" type="String" default="{v.recordId}"/>
+    <aura:attribute name="showSpinner" type="Boolean" default="true"/>
+   
+    <aura:attribute name="selectedCampaignId" type="String" default=""/>
+    
+    <aura:handler name="init" action="{!c.doInit}" value="{!this}"/>
+
+    <!-- backing data -->
+    <aura:attribute name="data" type="List" />
+    
+    <!-- data table attributes -->
+    <aura:attribute name="columns" type="List" />
+    <aura:attribute name="filteredData" type="List" />
+
+    <!-- filter input -->
+    <aura:attribute name="filter" type="String" />
+
+    <aura:if isTrue="{!v.showSpinner}">
+        <lightning:spinner aura:id="spinner" size="small"/> 
+    </aura:if>    
+
+
+    <aura:html tag="style">
+        .cuf-content {
+            padding: 0 0rem !important;
+        }
+        .slds-p-around--medium {
+            padding: 0rem !important;
+        } 
+
+        .slds-modal__container {
+            margin: 0 auto;
+            width: 60%;
+            max-width: 80rem;
+            min-width: 20rem;
+        }
+
+        .slds-modal__content{
+            overflow-y:hidden !important;
+            height:unset !important;
+            max-height:unset !important;
+            padding: 20px;
+        }
+        .slds-file--card {
+        	margin-bottom:20px;
+        }
+        .forceContentFileCard {
+        	width:25rem !important;
+        }
+
+        .slds-file--card {
+		    margin-bottom: 0px !important;
+		}
+
+		td {
+			padding-right: 10px;
+    		padding-top: 10px;
+		}
+		.modal-content-scroll {
+			overflow: auto !important;
+    		max-height: calc(100vh - 300px) !important;
+    		display: block;
+        }
+        .slds-spinner_container {
+            background-color: inherit;
+        }
+        .slds-select.active-campaign {
+            color : green !important;
+        }
+        select { -webkit-appearance: none; }
+        
+        
+    </aura:html>
+	
+	<div class="modal-header slds-modal__header slds-size_1-of-1">
+        <h4 class="title slds-text-heading--medium" >Related Campaign</h4>
+    </div>    
+        
+        <!-- MODAL BODY / INPUT FORM -->    
+    <div class="slds-modal__content modal-content-scroll slds-p-around--x-small slds-align_absolute-center slds-size_1-of-1 slds-is-relative" aura:id="modalbody" id="modalbody">        
+            
+        <div class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-hint-parent">					
+            <div class="slds-form-element__control">
+                  <lightning:input type="search" onchange="{!c.filter}" value="{!v.filter}" label="Filter" /> 
+            </div>
+        </div>
+        <div class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-hint-parent">
+            <div style="height: 250px">          
+                <lightning:datatable aura:id="tblCam" keyField="name" columns="{!v.columns}" data="{!v.filteredData}" onrowselection="{!c.handleRowAction}" maxRowSelection="1"/>
+            </div> 
+        </div>  
+    </div>   <!-- End of Modal Content -->     
+
+    <!-- MODAL FOOTER -->
+    <div class="modal-footer slds-modal__footer slds-size_1-of-1">
+        <div class="forceChangeRecordTypeFooter"> 
+                <ui:button class="slds-button slds-button--brand" label="Save" press="{!c.doSave}"/>
+                <ui:button class="slds-button slds-button_neutral" label="Cancel" press="{!c.cancel}" />                 
+        </div>
+    </div>  
+        
+     	
+
+</aura:component>

@@ -1,0 +1,12 @@
+<aura:component implements= "lightning:availableForFlowActions,force:hasRecordId" access="global">
+
+   <aura:attribute name="recordError" type="String"
+                    description="An error message bound to force:recordData"/>
+    
+    <force:recordData aura:id="recordLoader"
+                      layoutType="FULL"
+                      recordId="{!v.recordId}"
+                      targetError="{!v.recordError}"
+                      />
+    
+</aura:component>
